@@ -1,12 +1,18 @@
 function moduleProject3() {
 
   // 👉 TASK 1 - Write a `buildNav` component that returns a nav
-
   function buildNav(links) {
     //  ✨ do your magic here
-    return document.createElement('nav')
+    const navContainer = document.createElement('nav');
+    links.forEach(link => {
+      let a = document.createElement("a")
+      a.href = link.href;
+      a.textContent = link.textContent;
+      a.title = link.title;
+      navContainer.appendChild(a)
+    })
+    return navContainer;
   }
-
   // ❗ DOM creation using your `buildNav` component (do not change):
   document.querySelector('header').appendChild(buildNav([
     { href: 'https://www.example.com', textContent: 'Home', title: 'Go to the home page' },
@@ -16,10 +22,39 @@ function moduleProject3() {
     { href: 'https://www.example.com/contact', textContent: 'Contact', title: 'Get in touch with us' },
   ]))
 
+
   // 👉 TASK 2A - Write a `buildLearnerCard` component that returns a card
 
   function buildLearnerCard(learner, languages) {
     //  ✨ do your magic here
+    const cardElement = document.createElement("div");
+    cardElement.classList.add("learner-card");
+
+    const nameElement = document.createElement("p");
+    nameElement.textContent = learner.fullName;
+
+    const iDElement = document.createElement("p");
+    iDElement.textContent = `Learner ID: ${learner.id}`;
+
+    const birthElement = document.createElement("p");
+    birthElement.textContent = `Date of Birth: ${learner.dateOfBirth}`;
+
+    const favLang = document.createElement("p");
+    const favoriteLang = languages.find(lang => lang.id === learner.favLanguage)
+    favLang.textContent = `Favorite Language: ${favoriteLang.name}`;
+
+    [nameElement, iDElement, birthElement, favLang].forEach(p => {
+      cardElement.appendChild(p)
+    });
+
+    cardElement.addEventListener("click", evt => {
+      document.querySelectorAll(".learner-card").forEach(card => {
+        card.classList.remove("active");
+      });
+      cardElement.classList.add("active");
+
+    })
+    return cardElement
   }
 
   {
@@ -40,13 +75,57 @@ function moduleProject3() {
       { id: 17, fullName: 'Daniel Castillo', dateOfBirth: '1995-11-05', favLanguage: 12 }
     ]
     //  ✨ do your magic here
+    learners.forEach(learner => {
+      const learnerCard = buildLearnerCard(learner, languages)
+      document.querySelector("section").appendChild(learnerCard)
+      return learnerCard
+    })
   }
 
   // 👉 TASK 3 - Write a `buildFooter` component that returns a footer
 
   function buildFooter(footerData) {
     //  ✨ do your magic here
-    return document.createElement('footer')
+    const footer = document.createElement('footer');
+
+    const companyInfo = document.createElement("div");
+    companyInfo.classList.add("company-info");
+
+    const cName = document.createElement("p");
+    cName.classList.add("company-name");
+    cName.textContent = footerData.companyName;
+
+    const addressP = document.createElement("p");
+    addressP.classList.add("address");
+    addressP.textContent = footerData.address;
+
+    const email = document.createElement("p");
+    email.classList.add("contact-email");
+    email.innerHTML = `Email: <a href="mailto:${footerData.contactEmail}"> ${footerData.contactEmail}</a>`
+
+    companyInfo.appendChild(cName);
+    companyInfo.appendChild(addressP);
+    companyInfo.appendChild(email);
+
+    footer.appendChild(companyInfo)
+    /** JUST TO SPLIT UP EACH CLASS DIV */
+
+    const socials = document.createElement("div");
+    socials.classList.add("social-media");
+    for (let social in footerData.socialMedia) {
+      const socialLink = document.createElement("a");
+      socialLink.href = footerData.socialMedia[social];
+      socialLink.textContent = social.charAt(0).toUpperCase() + social.slice(1);
+      socials.appendChild(socialLink)
+    }
+
+    footer.appendChild(socials)
+
+    const school = document.createElement("div");
+    school.textContent = "© BLOOM INSTITUTE OF TECHNOLOGY 2024";
+    footer.appendChild(school)
+
+    return footer;
   }
 
   // ❗ DOM creation using your `buildFooter` component (do not change):
